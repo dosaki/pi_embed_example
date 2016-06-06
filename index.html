@@ -31,11 +31,16 @@
        */
 
       //I'm separating this here because it makes it easier to insert the token after /chart
-      var url = "http://localhost:8080/pi/chart"
-      var chartFragment = "#chart-filter/290__1"
+      var url = "http://localhost:8080/" //Change this to your server
+      var username = "admin" //Change this to the user you want to login as
+      var password = "dashboard" //Change this to user's password
+      var chartFragment = "#chart-filter/290__1" //Change this to the chart you want to see
+
+      var apiToken = "panMISDashboardWebServices/api/token/"
+      var piChart = "pi/chart"
 
       // Here you call the API URL (API documentation is bundled in your dashboard: http://localhost:8080/panMISDashboardWebServices/api/documentation/)
-      call("http://localhost:8080/panMISDashboardWebServices/api/token/?username=admin&password=dashboard", 'POST', function(xhr){
+      call(url+apiToken+"?username="+username+"&password="+password, 'POST', function(xhr){
         /**
          * The token response comes back in XML as something like below
          * <UserDetails>
@@ -47,7 +52,7 @@
         var token = response.UserDetails[0].Token[0]._text
 
         //The URL should look like: http://localhost:8080/pi/chart?token=GeneratedTokenHere#chart-filter/290__1
-        document.getElementById("chart").src = url + "?token=" + token + chartFragment
+        document.getElementById("chart").src = url + piChart + "?token=" + token + chartFragment
       })
     </script>
   </body>
