@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>
+      PI Embedding
+    </title>
+  </head>
+  <body>
+    <p>Don't just embed the Dashboard</p>
+    <p>Embed Us</p>
+
+    <!-- The iFrame where we'll stick the chart into -->
+    <iframe id="chart" width="500" height="500" src=""></iframe>
+    <p>If you need any help, just contact us at <a href="mailto:support@panintelligence.com">support@panintelligence.com</p>
+
+    <!-- Helper to convert xml to json: https://github.com/metatribal/xmlToJSON -->
+    <script src="xmlToJSON.js"></script>
+
+    <!-- Helper to do an AJAX call -->
+    <script src="call.js"></script>
+
+    <script>
+      /**
+       * Chart Embed URL http://localhost:8080/pi/chart#chart-filter/290__1
+       *                 |_______________________||___||__________________|
+       *                             |              |            |
+       *                       This is your         |    And this bit identifies
+       *                       dashboard URL        |     which chart you want
+       *                                            |
+       *                               This bit tells the dashboard
+       *                                  that you want a chart
+       */
+
+      //I'm separating this here because it makes it easier to insert the token after /chart
+      var url = "http://localhost:8080/pi/chart"
+      var chartFragment = "#chart-filter/290__1"
+
+      // Here you call the API URL (API documentation is bundled in your dashboard: http://localhost:8080/panMISDashboardWebServices/api/documentation/)
+      call("http://localhost:8080/panMISDashboardWebServices/api/token/?username=admin&password=dashboard", 'POST', function(xhr){
+        /**
+         * The token response comes back in XML as something like below
+         * <UserDetails>
+         *   <Token>wjpA9NJXuco9PBjuO0acRqy9hOKaQK6jfB8ETlePlBM0er7hcf</Token>
+         *   ...
+         * <UserDetails>
+         */
+        var response = xmlToJSON.parseString(xhr.responseText) // JSON is easier to manipulate in javascript...
+        var token = response.UserDetails[0].Token[0]._text
+
+        //The URL should look like: http://localhost:8080/pi/chart?token=GeneratedTokenHere#chart-filter/290__1
+        document.getElementById("chart").src = url + "?token=" + token + chartFragment
+      })
+    </script>
+  </body>
+</html>
