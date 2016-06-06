@@ -1,2 +1,2 @@
-# pi_embed_exaple
-Example for embedding a Panintelligence Chart
+# Example: Embedding a Panintelligence Chart
+Example code for embedding a Panintelligence Chart.
